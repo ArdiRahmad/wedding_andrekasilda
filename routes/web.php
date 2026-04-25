@@ -5,14 +5,13 @@ use App\Http\Controllers\Admin\GuestController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\WaTemplateController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [FrontendController::class, 'index']);
 
 // Cukup panggil satu kali saja
-Auth::routes(); 
+Auth::routes();
 
 Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
