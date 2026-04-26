@@ -15,8 +15,10 @@ import RSVP from "../sections/RSVP";
 import Footer from "../sections/Footer";
 import Gift from "../sections/Gift";
 import MusicPlayer from "../sections/MusicPlayer";
+import { usePage } from "@inertiajs/react";
 
 function Home() {
+    const { guest, wishes } = usePage()?.props;
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
 
@@ -47,14 +49,14 @@ function Home() {
             />
             <div className="fixed inset-0 -z-10 bg-black/40" />
             <MusicPlayer />
-            <Intro />
+            <Intro guest={guest} />
             <Couple />
             <Carousel />
             <Event />
             <OurStory />
             <Gallery />
             <Gift />
-            <RSVP />
+            <RSVP guest={guest} wishes={wishes} />
             <Footer />
         </div>
     );

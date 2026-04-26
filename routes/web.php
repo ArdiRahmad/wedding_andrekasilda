@@ -9,6 +9,7 @@ use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [FrontendController::class, 'index']);
+Route::post('/rsvp', [FrontendController::class, 'rsvp']);
 
 // Cukup panggil satu kali saja
 Auth::routes();

@@ -19,10 +19,11 @@ return new class extends Migration
             $table->enum('rsvp_status', ['pending', 'hadir', 'tidak_hadir'])->default('pending'); // Status RSVP
             $table->integer('pax')->default(0); // Jumlah orang yang dibawa
             $table->text('message')->nullable(); // Ucapan dari tamu
-            $table->boolean('is_wishes')->default(false); 
+            $table->boolean('is_wishes')->default(false);
             $table->boolean('is_wa_sent')->default(false); // Status apakah WA sudah dikirim
             $table->string('unique_code')->unique()->nullable(); // Kode unik untuk URL undangan
             $table->string('side')->default('groom'); // Sisi (Mempelai Pria atau Mempelai Wanita)
+            $table->string('gift_image')->nullable();
             $table->timestamps();
         });
     }
