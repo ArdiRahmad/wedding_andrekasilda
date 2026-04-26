@@ -425,12 +425,8 @@ function RSVP({ guest, wishes }) {
                     ref={successRef}
                     className="bg-white p-6 rounded-lg shadow-lg opacity-0 w-[85%] text-center"
                 >
-                    <div className="flex justify-center mb-3 text-brown-dark text-3xl">
-                        <FaEnvelopeOpen />
-                    </div>
-
-                    <p className="font-body text-lg text-brown mb-2">
-                        Berhasil 🎉
+                    <p className="rsvp-title font-body font-bold text-brown text-2xl mb-5">
+                        RSVP BERHASIL
                     </p>
 
                     <p className="font-content text-xs text-gray-600 mb-4">
