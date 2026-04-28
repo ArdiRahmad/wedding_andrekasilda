@@ -8,20 +8,69 @@ use Inertia\Inertia;
 
 class FrontendController extends Controller
 {
-    public function index(Request $request)
-    {
-        $guest = '';
+    // public function index($code = null)
+    // {
+    //     $type = 'mrn';
+    //     $guest = '';
+    //     if ($code) {
+    //         if ($code == 'admin') {
+    //             return redirect()->route('admin.index');
+    //         }
+    //         $guest = Guest::where('unique_code', $code)->first();
+    //         if ($guest && $guest->tag) {
+    //             $type = $guest->tag;
+    //         } else {
+    //             return redirect()->to('/');
+    //         }
+    //     }
 
-        if ($request->code) {
-            $guest = Guest::where('unique_code', $request->code)->first();
+    //     $wishes = Guest::select('message', 'name')->where('is_wishes', 1)->get();
+    //     return Inertia::render('Home', [
+    //         'guest' => $guest,
+    //         'wishes' => $wishes,
+    //         'type' => $type
+    //     ]);
+    // }
+    public function index($code = null)
+    {
+        // Default tipe jika diakses tanpa URL parameter (root '/')
+        $type = 'mrn';
+        $guest = null; // Lebih aman menggunakan null daripada string kosong untuk object
+
+        if ($code) {
+            // 1. Cek apakah itu akses admin
+            if ($code === 'admin') {
+                return redirect()->route('admin.index');
+            }
+
+            // 2. Cek apakah itu akses link statis tipe undangan
+            if (in_array($code, ['aft', 'mrn'])) {
+                $type = $code;
+            } 
+            // 3. Jika bukan keduanya, asumsikan itu adalah kode tamu unik
+            else {
+                $guest = Guest::where('unique_code', $code)->first();
+                
+                if ($guest && $guest->tag) {
+                    $type = $guest->tag;
+                } else {
+                    // Tamu tidak ditemukan, kembalikan ke beranda
+                    return redirect()->to('/');
+                }
+            }
         }
+
+        // Ambil data ucapan
         $wishes = Guest::select('message', 'name')->where('is_wishes', 1)->get();
+        
+        // Render ke frontend (Vue/React via Inertia)
         return Inertia::render('Home', [
             'guest' => $guest,
-            'wishes' => $wishes
+            'wishes' => $wishes,
+            'type' => $type
         ]);
     }
-
+    
     public function rsvp(Request $request)
     {
         $request->validate([

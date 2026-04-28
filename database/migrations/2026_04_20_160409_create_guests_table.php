@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('unique_code')->unique()->nullable(); // Kode unik untuk URL undangan
             $table->string('side')->default('groom'); // Sisi (Mempelai Pria atau Mempelai Wanita)
             $table->string('gift_image')->nullable();
+            $table->string('tag')->default('mrn');
             $table->timestamps();
         });
     }

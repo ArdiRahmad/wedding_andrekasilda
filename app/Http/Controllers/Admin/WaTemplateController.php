@@ -40,6 +40,32 @@ class WaTemplateController extends Controller
         return back()->with('success', 'Template berhasil ditambahkan.');
     }
 
+    // --- TAMBAHAN METHOD EDIT ---
+    public function edit(WaTemplate $wa_template)
+    {
+        // Akan mengembalikan view form edit, pastikan file admin/wa-templates/edit.blade.php sudah Anda buat
+        return view('admin.wa-templates.edit', compact('wa_template'));
+    }
+
+    // --- TAMBAHAN METHOD UPDATE ---
+    public function update(Request $request, WaTemplate $wa_template)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        // Simpan perubahan data (biasanya saat edit kita tidak perlu ubah is_active di sini
+        // karena sudah ada tombol khusus 'setActive' di halaman index)
+        $wa_template->update([
+            'title' => $request->title,
+            'message' => $request->message,
+        ]);
+
+        // Redirect kembali ke halaman index setelah berhasil edit
+        return redirect()->route('admin.wa-templates.index')->with('success', 'Template "' . $wa_template->title . '" berhasil diperbarui.');
+    }
+
     public function setActive(WaTemplate $wa_template)
     {
         // Set semua jadi false dulu
@@ -53,6 +79,7 @@ class WaTemplateController extends Controller
 
     public function destroy(WaTemplate $wa_template)
     {
+        // dd('a');
         if ($wa_template->is_active) {
             return back()->with('error', 'Template aktif tidak boleh dihapus. Aktifkan template lain dulu.');
         }

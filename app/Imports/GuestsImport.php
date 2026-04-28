@@ -22,6 +22,7 @@ class GuestsImport implements ToModel, WithHeadingRow, SkipsEmptyRows
             'rsvp_status'     => $row['rsvp_status'] ?? 'pending',
             'pax'             => $row['pax'] ?? 1,
             'side'            => $row['side'] ?? 'groom',
+            'tag'            => $row['tag'] ?? 'mrn',
             // unique_code tidak perlu diimport agar tetap auto-generate yang unik di sistem
         ]);
     }

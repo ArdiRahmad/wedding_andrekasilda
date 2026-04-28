@@ -21,6 +21,7 @@ class GuestTemplateExport implements FromCollection, WithHeadings, WithStyles
                 'Kategori' => 'Keluarga',
                 'Sisi (groom/bride)' => 'groom',
                 'Pax' => '2',
+                'Tag' => 'mrn',
             ]
         ]);
     }
@@ -33,6 +34,7 @@ class GuestTemplateExport implements FromCollection, WithHeadings, WithStyles
             'category',
             'side',
             'pax',
+            'tag'
         ];
     }
 

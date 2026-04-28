@@ -15,8 +15,18 @@ class GuestController extends Controller
 {
     public function index()
     {
-        $guests = Guest::latest()->paginate(10);
-        return view('admin.guests.index', compact('guests'));
+        // PERBAIKAN 1: Gunakan get() agar SEMUA data dikirim ke DataTables
+        $guests = Guest::latest()->get();
+        
+        // 1. Ambil template yang aktif
+        $template = WaTemplate::where('is_active', true)->first();
+        
+        // 2. Siapkan rawMessage untuk dikirim ke view index
+        // Beri nilai null jika tidak ada template agar view pakai pesan default
+        $rawMessage = $template ? $template->message : null;
+
+        // 3. Tambahkan 'rawMessage' ke dalam compact
+        return view('admin.guests.index', compact('guests', 'rawMessage'));
     }
 
     public function create()
@@ -31,7 +41,8 @@ class GuestController extends Controller
             'whatsapp_number' => 'nullable|string|max:20',
             'category' => 'nullable|string',
             'side' => 'required|in:groom,bride',
-            'pax' => 'required|integer|min:1', // Validasi minimal 1
+            'pax' => 'required|integer|min:1',
+            'tag' => 'nullable|string|max:50', // PERBAIKAN 2: Tambahkan validasi tag
         ]);
 
         Guest::create($validated);
@@ -51,8 +62,9 @@ class GuestController extends Controller
             'whatsapp_number' => 'nullable|string|max:20',
             'category' => 'nullable|string',
             'rsvp_status' => 'required|in:pending,hadir,tidak_hadir',
-            'pax' => 'integer|min:0',
+            'pax' => 'required|integer|min:0', // Dipertegas jadi required
             'side' => 'required|in:groom,bride',
+            'tag' => 'nullable|string|max:50', // PERBAIKAN 2: Tambahkan validasi tag
         ]);
 
         $guest->update($validated);
@@ -112,7 +124,7 @@ class GuestController extends Controller
                         ->get();
 
         // Ambil template yang aktif
-        $template = \App\Models\WaTemplate::where('is_active', true)->first();
+        $template = WaTemplate::where('is_active', true)->first();
         
         // Fallback: Jika admin belum buat template atau tidak ada yang aktif
         $rawMessage = $template ? $template->message : "Halo {name}, cek undangan kami di {url}";

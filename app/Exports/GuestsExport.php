@@ -29,7 +29,8 @@ class GuestsExport implements FromCollection, WithHeadings, WithMapping
             'Unique Code',
             'Side',
             'Created At',
-            'Link'
+            'Link',
+            'Tag',
         ];
     }
 
@@ -48,7 +49,8 @@ class GuestsExport implements FromCollection, WithHeadings, WithMapping
             $guest->unique_code,
             $guest->side,
             $guest->created_at->format('Y-m-d H:i:s'),
-            'https://yourdomain.com/guest/' . $guest->code
+            'https://andreaskasilda.online/' . $guest->unique_code,
+            $guest->tag,
         ];
     }
 }

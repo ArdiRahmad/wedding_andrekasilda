@@ -25,7 +25,8 @@ class Guest extends Model
         'is_wa_sent',
         'unique_code',
         'is_wishes',
-        'gift_image'
+        'gift_image',
+        'tag'
     ];
 
     protected $appends = ['gift_image_url'];
