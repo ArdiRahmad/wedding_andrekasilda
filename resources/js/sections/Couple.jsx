@@ -153,7 +153,7 @@ function Couple() {
 
                     <p className="names font-content font-light text-xs text-white text-center mb-14">
                         PUTRI DARI <br />
-                        Bpk. Dr. Antonius Gatot Subroto, Sp.N, FMIN <br />
+                        Bpk. dr. Antonius Gatot Subroto, Sp.N, FMIN <br />
                         Ibu Ida Erviyani (Almh)
                     </p>
 

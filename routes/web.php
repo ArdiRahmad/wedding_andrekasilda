@@ -8,7 +8,6 @@ use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\FrontendController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', [FrontendController::class, 'index']);
 Route::post('/rsvp', [FrontendController::class, 'rsvp']);
 
 // Cukup panggil satu kali saja
@@ -38,3 +37,5 @@ Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () 
     Route::get('change-password', [SettingController::class, 'changePassword'])->name('password.change');
     Route::post('change-password', [SettingController::class, 'updatePassword'])->name('password.update');
 });
+
+Route::get('/{code?}', [FrontendController::class, 'index']);

@@ -8,17 +8,27 @@ use Inertia\Inertia;
 
 class FrontendController extends Controller
 {
-    public function index(Request $request)
+    public function index($code = null)
     {
+        $type = 'mrn';
         $guest = '';
-
-        if ($request->code) {
-            $guest = Guest::where('unique_code', $request->code)->first();
+        if ($code) {
+            if ($code == 'admin') {
+                return redirect()->route('admin.index');
+            }
+            $guest = Guest::where('unique_code', $code)->first();
+            if ($guest && $guest->tag) {
+                $type = $guest->tag;
+            } else {
+                return redirect()->to('/');
+            }
         }
+
         $wishes = Guest::select('message', 'name')->where('is_wishes', 1)->get();
         return Inertia::render('Home', [
             'guest' => $guest,
-            'wishes' => $wishes
+            'wishes' => $wishes,
+            'type' => $type
         ]);
     }
 

@@ -333,7 +333,7 @@ function RSVP({ guest, wishes }) {
 
                                     {rsvp_status.map((item) => {
                                         let status =
-                                            guest.rsvp_status == item.code &&
+                                            guest?.rsvp_status == item.code &&
                                             "selected";
                                         return (
                                             <option
@@ -357,7 +357,7 @@ function RSVP({ guest, wishes }) {
                                     <option>-- Side --</option>
                                     {sides.map((item) => {
                                         let side =
-                                            guest.side == item.code &&
+                                            guest?.side == item.code &&
                                             "selected";
                                         return (
                                             <option
@@ -370,7 +370,7 @@ function RSVP({ guest, wishes }) {
                                     })}
                                 </select>
                             </div>
-                            <div className="rsvp-field flex flex-col items-start mb-3">
+                            {/* <div className="rsvp-field flex flex-col items-start mb-3">
                                 <label className="text-xs mb-2">GIFT</label>
                                 <input
                                     name="gift_image"
@@ -394,7 +394,7 @@ function RSVP({ guest, wishes }) {
                                         Preview Gift
                                     </div>
                                 </div>
-                            )}
+                            )} */}
 
                             <div className="rsvp-field flex flex-col items-start mb-6">
                                 <label className="text-xs mb-2">UCAPAN</label>
@@ -408,10 +408,17 @@ function RSVP({ guest, wishes }) {
                             </div>
 
                             <button
+                                disabled={processing}
                                 type="submit"
-                                className="rsvp-button bg-brown-dark px-14 py-2 text-white text-xs"
+                                className={`rsvp-button px-14 py-2 text-white text-xs transition
+                                    ${
+                                        processing
+                                            ? "bg-gray-400 cursor-not-allowed"
+                                            : "bg-brown-dark"
+                                    }
+                                `}
                             >
-                                SUBMIT
+                                {processing ? "SUBMITTING..." : "SUBMIT"}
                             </button>
                         </div>
                     </form>

@@ -12,11 +12,25 @@ import { musicController } from "./MusicPlayer";
 
 function Intro({ guest }) {
     const [isOpened, setIsOpened] = useState(false);
-
     useEffect(() => {
         document.body.style.overflow = isOpened ? "auto" : "hidden";
         return () => (document.body.style.overflow = "auto");
     }, [isOpened]);
+
+    useEffect(() => {
+        const nav = performance.getEntriesByType("navigation")[0];
+
+        if (nav?.type === "reload") {
+            setIsOpened(true);
+            document.body.style.overflow = "auto";
+
+            if (musicController.isReady) {
+                musicController.play?.();
+            } else {
+                musicController._pendingPlay = true;
+            }
+        }
+    }, []);
 
     useGSAP(() => {
         if (isOpened) {
@@ -82,24 +96,28 @@ function Intro({ guest }) {
                 </div>
 
                 {/* LINE */}
-                <div className="absolute inset-0 flex justify-center items-center z-10">
-                    <div className="line h-full w-[1px] bg-[#F7DABD] origin-top" />
-                </div>
+                {/* <div className="absolute inset-0 flex justify-center items-center z-10">
+                    {!isOpened && (
+                        <div className="line h-full w-[1px] bg-[#F7DABD] origin-top" />
+                    )}
+                </div> */}
 
                 {/* CONTENT */}
                 <div className="relative z-20 flex flex-col items-center justify-center flex-1">
-                    <div className="cta w-full">
-                        <div className="bg-primary w-full text-center">
-                            <p className="text-white font-body text-sm py-1">
-                                KLIK UNTUK MEMBUKA UNDANGAN
-                            </p>
+                    {!isOpened && (
+                        <div className="cta w-full">
+                            <div className="bg-primary w-full text-center">
+                                <p className="text-white font-body text-sm py-1">
+                                    KLIK UNTUK MEMBUKA UNDANGAN
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* ORNAMENT */}
                 <div className="absolute bottom-[-40px] w-full flex justify-center z-20">
-                    <img className="ornament" src={ornament} />
+                    {!isOpened && <img className="ornament" src={ornament} />}
                 </div>
 
                 {isOpened && (

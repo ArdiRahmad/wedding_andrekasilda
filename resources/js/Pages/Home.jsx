@@ -18,7 +18,7 @@ import MusicPlayer from "../sections/MusicPlayer";
 import { usePage } from "@inertiajs/react";
 
 function Home() {
-    const { guest, wishes } = usePage()?.props;
+    const { guest, wishes, type } = usePage()?.props;
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
 
@@ -52,7 +52,7 @@ function Home() {
             <Intro guest={guest} />
             <Couple />
             <Carousel />
-            <Event />
+            <Event type={type} />
             <OurStory />
             <Gallery />
             <Gift />

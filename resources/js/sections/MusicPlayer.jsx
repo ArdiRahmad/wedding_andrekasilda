@@ -7,6 +7,8 @@ import { PiVinylRecordDuotone } from "react-icons/pi";
 export const musicController = {
     play: null,
     pause: null,
+    isReady: false,
+    _pendingPlay: false,
 };
 
 function MusicPlayer() {
@@ -15,29 +17,35 @@ function MusicPlayer() {
     const [isPlaying, setIsPlaying] = useState(false);
 
     // =========================
-    // PLAY (with fade in)
+    // PLAY
     // =========================
-    const playMusic = () => {
+    const playMusic = async () => {
         if (!audioRef.current) return;
 
-        audioRef.current.volume = 0;
-        audioRef.current.play();
+        try {
+            audioRef.current.volume = 0;
+            await audioRef.current.play();
 
-        gsap.to(audioRef.current, {
-            volume: 0.4,
-            duration: 1.2,
-        });
+            gsap.to(audioRef.current, {
+                volume: 0.4,
+                duration: 1.2,
+            });
 
-        setIsPlaying(true);
+            setIsPlaying(true);
+        } catch (err) {
+            console.log("Play blocked:", err);
+        }
     };
 
     // =========================
-    // PAUSE (with fade out)
+    // PAUSE
     // =========================
     const pauseMusic = () => {
         if (!audioRef.current || isFadingOut.current) return;
 
         isFadingOut.current = true;
+
+        gsap.killTweensOf(audioRef.current);
 
         gsap.to(audioRef.current, {
             volume: 0,
@@ -50,11 +58,10 @@ function MusicPlayer() {
         });
     };
 
-    // =========================
-    // FORCE PAUSE (NO GSAP)
-    // =========================
     const forcePause = () => {
         if (!audioRef.current) return;
+
+        gsap.killTweensOf(audioRef.current);
 
         audioRef.current.pause();
         audioRef.current.volume = 0;
@@ -63,12 +70,29 @@ function MusicPlayer() {
         isFadingOut.current = false;
     };
 
-    // expose global controller
-    musicController.play = playMusic;
-    musicController.pause = pauseMusic;
+    // =========================
+    // REGISTER CONTROLLER (IMPORTANT FIX)
+    // =========================
+    useEffect(() => {
+        musicController.play = playMusic;
+        musicController.pause = pauseMusic;
+        musicController.isReady = true;
+
+        // 🔥 IMPORTANT: kalau ada request sebelum ready
+        if (musicController._pendingPlay) {
+            musicController._pendingPlay = false;
+            playMusic();
+        }
+
+        return () => {
+            musicController.play = null;
+            musicController.pause = null;
+            musicController.isReady = false;
+        };
+    }, []);
 
     // =========================
-    // HANDLE TAB / WINDOW STATE
+    // HANDLE TAB SWITCH
     // =========================
     useEffect(() => {
         const handleVisibilityChange = () => {
